@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Global World Tour & Travel — Official Scrollytelling Experience</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --brand-blue: #2A7DE1;
+            --brand-dark: #1A1A2E;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #F8F9FA;
+            color: var(--brand-dark);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        #hero-bg,
+        #hero-plane {
+            transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        /* Hero background — cover to fill screen, centered */
+        #hero-bg {
+            background-size: cover;
+            background-position: center 14%; /* slight upper offset to show more of the image */
+            background-repeat: no-repeat;
+            background-color: #0a0a1a;
+        }
+
+        /* Trust Marquee */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background: #FFFFFF;
+            padding: 2rem 0;
+            border-top: 1px solid #E5E7EB;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee-scroll 60s linear infinite;
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes marquee-scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .whatsapp-pulse {
+            animation: whatsapp-glow 2.5s infinite ease-in-out;
+        }
+        @keyframes whatsapp-glow {
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+            }
+            50% {
+                transform: scale(1.03);
+                box-shadow: 0 10px 25px rgba(34, 197, 94, 0.6);
+            }
+        }
+
+        .fab-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .back-to-top {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--brand-dark);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+        }
+        .back-to-top svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .whatsapp-float {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25D366;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .lang-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.05em;
+        }
+        .lang-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-headline {
+            text-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .hero-sub {
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 1px 6px rgba(0, 0, 0, 0.4);
+        }
+        .hero-dark-overlay {
+            background: rgba(0, 0, 0, 0.55);
+        }
+
+        .footer-lg {
+            font-size: 0.9rem;
+        }
+        .footer-lg .text-xs {
+            font-size: 0.85rem !important;
+        }
+        .footer-lg .text-[10px] {
+            font-size: 0.8rem !important;
+        }
+        .footer-lg h5 {
+            font-size: 0.95rem !important;
+        }
+        .footer-lg li {
+            font-size: 0.85rem !important;
+        }
+        .footer-lg p {
+            font-size: 0.85rem !important;
+        }
+        @media (max-width: 640px) {
+            .footer-lg .text-xs {
+                font-size: 0.75rem !important;
+            }
+            .footer-lg .text-[10px] {
+                font-size: 0.7rem !important;
+            }
+            .footer-lg h5 {
+                font-size: 0.8rem !important;
+            }
+            .footer-lg li {
+                font-size: 0.75rem !important;
+            }
+            .footer-lg p {
+                font-size: 0.75rem !important;
+            }
+        }
+
+        .marquee-img {
+            height: 180px;
+            width: auto;
+            min-width: 140px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 0 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+            flex-shrink: 0;
+        }
+        @media (min-width: 768px) {
+            .marquee-img {
+                height: 260px;
+                min-width: 200px;
+                margin: 0 18px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .marquee-img {
+                height: 300px;
+                min-width: 240px;
+                margin: 0 24px;
+            }
+        }
+
+        /* Founder slideshow */
+        .slide-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 1.2s ease-in-out;
+            opacity: 0;
+        }
+        .slide-img.active {
+            opacity: 1;
+        }
+        .slide-overlay {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 5;
+        }
+        .slide-overlay .text-3xl {
+            font-size: 1.8rem;
+        }
+        .slide-overlay .text-xs {
+            font-size: 0.65rem;
+        }
+        .slide-overlay .font-bold {
+            font-weight: 700;
+        }
+        @media (min-width: 640px) {
+            .slide-overlay {
+                bottom: 1.5rem;
+                left: 1.5rem;
+                right: 1.5rem;
+                padding: 1rem;
+            }
+            .slide-overlay .text-3xl {
+                font-size: 2rem;
+            }
+            .slide-overlay .text-xs {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Mobile hero text adjustments */
+        @media (max-width: 480px) {
+            .hero-headline {
+                font-size: 2.2rem;
+            }
+            .hero-sub {
+                font-size: 1rem;
+            }
+            #hero-ctas a {
+                font-size: 0.85rem;
+                padding: 0.75rem 1.5rem;
+            }
+            .hero-stats p:first-child {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* adjust hero content top margin */
+        .hero-content-wrap {
+            margin-top: 2rem;
+        }
+        @media (min-width: 640px) {
+            .hero-content-wrap {
+                margin-top: 3rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .hero-content-wrap {
+                margin-top: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CHAPTER 1: LAYERED PARALLAX HERO -->
+    <section id="chapter1" class="relative w-full h-screen flex flex-col justify-between items-center overflow-hidden bg-[#0a0a1a]">
+
+        <!-- Background Layer — cover with slight upper offset -->
+        <div id="hero-bg" class="absolute inset-0 z-0" style="background-image: url('https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/demo_home_11H.png');"></div>
+
+        <div class="absolute inset-0 z-5 hero-dark-overlay"></div>
+
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <img id="hero-plane" src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/A_commercial_airplane_flying_in_202606271744.png" alt="Commercial Airplane Flying" class="w-[90%] md:w-3/4 object-contain" />
+        </div>
+
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70 z-10 pointer-events-none"></div>
+
+        <div class="relative z-20 w-full max-w-7xl flex justify-between items-center px-4 sm:px-6 py-4 sm:py-6 md:py-8">
+            <div class="flex items-center">
+                <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/global-world-tour-travel-gwtt-logo-1.png" alt="Global World Tour & Travel Logo" class="h-10 sm:h-12 md:h-14 w-auto object-contain drop-shadow-lg" />
+            </div>
+            <div class="flex items-center gap-3 sm:gap-4">
+                <button id="langToggle" class="lang-toggle text-[0.65rem] sm:text-[0.75rem] px-3 sm:px-4 py-1.5 sm:py-2" data-lang="zh">EN</button>
+                <div class="hidden sm:flex items-center space-x-2 glass-panel px-3 py-1.5 rounded-full">
+                    <span class="text-amber-400 text-xs sm:text-sm">🏆</span>
+                    <span class="text-white text-[8px] sm:text-[10px] font-bold tracking-widest uppercase">MOTAC Licensed ITO</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Hero Content — adjusted margin-top for better vertical position -->
+        <div class="relative z-20 text-center max-w-4xl px-4 hero-content-wrap">
+            <h1 id="hero-title" class="hero-headline text-white text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-3 sm:mb-4 opacity-0 translate-y-8" data-zh="探索 195 个国家" data-en="Explore 195 Countries">
+                探索 195 个国家
+            </h1>
+            <p id="hero-subtext" class="hero-sub text-gray-200 text-base sm:text-xl md:text-2xl font-light tracking-wide mb-6 sm:mb-8 opacity-0 translate-y-8" data-zh="从马来西亚出发，开启您的极致世界之旅" data-en="Start Your Ultimate World Journey from Malaysia">
+                从马来西亚出发，开启您的极致世界之旅
+            </p>
+            <div id="hero-ctas" class="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 opacity-0 translate-y-8">
+                <a href="#chapter5" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-[#2A7DE1] hover:bg-blue-600 text-white font-bold rounded-lg shadow-xl transition-colors text-sm sm:text-base tracking-wider" data-zh="查看甄选行程" data-en="View Curated Tours">查看甄选行程</a>
+                <a href="https://wa.me/60172283816" target="_blank" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 glass-panel hover:bg-white/20 text-white font-bold rounded-lg transition-colors text-sm sm:text-base tracking-wider" data-zh="预约旅行顾问" data-en="Book Consultant">预约旅行顾问</a>
+            </div>
+        </div>
+
+        <!-- Empirical Stats -->
+        <div class="relative z-20 w-full max-w-5xl flex flex-col items-center gap-4 sm:gap-6 pb-4 sm:pb-8">
+            <div id="hero-stats" class="w-full grid grid-cols-3 gap-2 sm:gap-4 border-t border-white/20 pt-4 sm:pt-6 text-center text-white opacity-0">
+                <div>
+                    <p class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#2A7DE1] drop-shadow-md">195</p>
+                    <p class="text-[8px] sm:text-[11px] md:text-xs text-gray-300 uppercase tracking-widest mt-1 sm:mt-2" data-zh="主权国家跨国足迹" data-en="Sovereign Nations Explored">主权国家跨国足迹</p>
+                </div>
+                <div>
+                    <p class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#2A7DE1] drop-shadow-md">1996</p>
+                    <p class="text-[8px] sm:text-[11px] md:text-xs text-gray-300 uppercase tracking-widest mt-1 sm:mt-2" data-zh="深耕旅游执业起始年份" data-en="Industry Experience Since">深耕旅游执业起始年份</p>
+                </div>
+                <div>
+                    <p class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#2A7DE1] drop-shadow-md">4.9</p>
+                    <p class="text-[8px] sm:text-[11px] md:text-xs text-gray-300 uppercase tracking-widest mt-1 sm:mt-2" data-zh="Google 五星信誉认证" data-en="Google 5-Star Trust Rating">Google 五星信誉认证</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHAPTER 2: INFINITE TRUST MARQUEE -->
+    <div class="marquee-container relative z-30">
+        <div class="text-center mb-3 sm:mb-5 px-4">
+            <span class="text-[8px] sm:text-xs font-bold text-[#2A7DE1] uppercase tracking-widest block" data-zh="🏆 创始人李先生 (Lee Sei Loong) 官方授勋现场及探险纪实" data-en="🏆 Founder Lee Sei Loong Official Awards & Expeditions">🏆 创始人李先生 (Lee Sei Loong) 官方授勋现场及探险纪实</span>
+        </div>
+        <div class="marquee-track">
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(1).jpg" alt="Award 1" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(2).jpg" alt="Award 2" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(3).jpg" alt="Award 3" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(4).jpg" alt="Award 4" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(5).jpg" alt="Award 5" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(6).jpg" alt="Award 6" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(7).jpg" alt="Award 7" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(8).jpg" alt="Award 8" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(9).jpg" alt="Award 9" class="marquee-img" />
+            <!-- Duplicate for seamless loop -->
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(1).jpg" alt="Award 1" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(2).jpg" alt="Award 2" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(3).jpg" alt="Award 3" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(4).jpg" alt="Award 4" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(5).jpg" alt="Award 5" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(6).jpg" alt="Award 6" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(7).jpg" alt="Award 7" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(8).jpg" alt="Award 8" class="marquee-img" />
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/roll-img/roll-img-%20(9).jpg" alt="Award 9" class="marquee-img" />
+        </div>
+    </div>
+
+    <!-- CHAPTER 3: EXECUTIVE PROFILE & STORY -->
+    <section id="chapter3" class="relative w-full min-h-[90vh] bg-[#F8F9FA] flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20">
+        <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 items-center">
+
+            <!-- Founder visual with auto-slide -->
+            <div id="founder-visual" class="relative w-full max-w-xs sm:max-w-md mx-auto aspect-square overflow-hidden rounded-[2rem] shadow-2xl border border-gray-200 opacity-0 -translate-x-12">
+                <div class="slide-container">
+                    <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/3-1.png" alt="Lee Sei Loong - 1" class="slide-img active" id="slide1" />
+                    <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/3-2.png" alt="Lee Sei Loong - 2" class="slide-img" id="slide2" />
+                    <div class="slide-overlay">
+                        <span class="text-3xl">🥇</span>
+                        <div>
+                            <p class="text-[8px] sm:text-[9px] text-gray-500 font-bold uppercase tracking-wider">Official Record</p>
+                            <p class="text-[10px] sm:text-xs text-[#1A1A2E] font-bold" data-zh="Malaysia Book of Records 纪录保持者 (2023年1月)" data-en="Malaysia Book of Records (January 2023)">
+                                Malaysia Book of Records 纪录保持者 (2023年1月)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="founder-text" class="space-y-4 sm:space-y-6 opacity-0 translate-x-12">
+                <div class="inline-flex items-center space-x-2 bg-blue-50 text-[#2A7DE1] px-3 py-1 rounded-full text-[8px] sm:text-xs font-bold uppercase tracking-widest border border-blue-100">
+                    <span data-zh="创始人执行履历" data-en="Executive Profile">创始人执行履历</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#1A1A2E] leading-tight" data-zh="大马首位走遍<br><span class='text-[#2A7DE1]'>全球 195 国</span>的传奇向导" data-en="Malaysia's First Legendary Guide to Visit <br><span class='text-[#2A7DE1]'>All 195 Sovereign Countries</span>">
+                    大马首位走遍<br /><span class="text-[#2A7DE1]">全球 195 国</span>的传奇向导
+                </h2>
+                <div class="w-16 h-1 bg-[#2A7DE1] rounded"></div>
+                <p class="text-gray-600 leading-relaxed text-sm sm:text-base font-medium" data-zh="Global World Tour & Travel Sdn Bhd 创始人兼董事 <strong>Lee Sei Loong (李先生)</strong> 自 1996 年起深耕国际旅游行业。作为首位获得《马来西亚纪录大全》官方认证走遍全球 195 个主权国家的领航人物，他的足迹北至北极圈，横跨诸多高危与冷门秘境。<br><br>在他的亲自操刀下，GWTT 将 30 年的实地考察、签证通关、合规供应链审核与应急避险方案化作精细的数字化旅行库，杜绝行业内拼凑低端体验的乱象，为每一位旅客呈献极致妥帖的定制旅程。" data-en="<strong>Lee Sei Loong</strong>, founder and director of Global World Tour & Travel Sdn Bhd, has been a leading force in international tourism since 1996. As the first Malaysian officially recognized by the Malaysia Book of Records for exploring all 195 sovereign countries, his personal expeditions span from the Arctic Circle to complex, high-risk territories.<br><br>Under his leadership, GWTT channels nearly 30 years of on-ground logistical expertise, stringent MOTAC compliance auditing, and crisis management into a refined operational framework, ensuring uncompromising quality for every bespoke journey.">
+                    Global World Tour & Travel Sdn Bhd 创始人兼董事 <strong>Lee Sei Loong (李先生)</strong> 自 1996 年起深耕国际旅游行业。作为首位获得《马来西亚纪录大全》官方认证走遍全球 195 个主权国家的领航人物，他的足迹北至北极圈，横跨诸多高危与冷门秘境。<br><br>在他的亲自操刀下，GWTT 将 30 年的实地考察、签证通关、合规供应链审核与应急避险方案化作精细的数字化旅行库，杜绝行业内拼凑低端体验的乱象，为每一位旅客呈献极致妥帖的定制旅程。
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CHAPTER 4: VERIFIABLE HEADQUARTERS MAP -->
+    <section id="chapter4" class="relative w-full py-12 sm:py-20 bg-white flex flex-col justify-center items-center px-4 sm:px-6">
+        <div class="max-w-4xl text-center mb-8 sm:mb-12">
+            <span class="text-[8px] sm:text-xs font-bold text-[#2A7DE1] uppercase tracking-widest block mb-2" data-zh="合规实体与牌照保障" data-en="Verifiable Regulatory Infrastructure">合规实体与牌照保障</span>
+            <h2 id="map-title" class="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#1A1A2E] mb-4 opacity-0" data-zh="大马吉隆坡核心总部" data-en="Kuala Lumpur Core Headquarters">
+                大马吉隆坡核心总部
+            </h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-sm sm:text-base font-medium px-2" data-zh="拒绝纯线上轻资产盲区。我们以受大马 MOTAC 严格审计的实体商业空间，承载您跨国旅行的绝对财务与人身安全保障。" data-en="We reject the risks of purely online operations. Operating under strict MOTAC Malaysia audits, our physical commercial space guarantees your financial and personal travel security.">
+                拒绝纯线上轻资产盲区。我们以受大马 MOTAC 严格审计的实体商业空间，承载您跨国旅行的绝对财务与人身安全保障。
+            </p>
+        </div>
+
+        <div id="map-container" class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch opacity-0 scale-95">
+            <div class="w-full h-64 sm:h-80 lg:h-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 bg-gray-100">
+                <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15936.377414659195!2d101.694655!3d3.069457!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4b85c3001c37%3A0xde7f0770f6f838e2!2sGlobal%20World%20Tour%20%26%20Travel%20Sdn%20Bhd!5e0!3m2!1sen!2smy!4v1730873580273!5m2!1sen!2smy"
+                width="100%"
+                height="100%"
+                style="border:0; min-height: 260px;"
+                allowfullscreen=""
+                loading="lazy">
+            </iframe>
+        </div>
+        <div class="bg-[#F8F9FA] p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-lg flex flex-col justify-between space-y-4 sm:space-y-6">
+            <div>
+                <h4 class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mb-2" data-zh="官方注册地址 Registered Address" data-en="Registered Address">官方注册地址 Registered Address</h4>
+                <p class="text-[#1A1A2E] font-bold text-sm sm:text-base leading-relaxed">
+                    5-2, Jalan Radin Bagus 1, Bandar Baru Sri Petaling,<br />
+                    57000 Kuala Lumpur,<br />
+                    Wilayah Persekutuan Kuala Lumpur, Malaysia
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div class="bg-white p-3 sm:p-4 rounded-xl border border-gray-100 shadow-sm">
+                    <h4 class="text-[8px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" data-zh="官方服务热线" data-en="Official Hotline">官方服务热线</h4>
+                    <p class="text-[#2A7DE1] font-extrabold text-sm sm:text-lg">+603-9055 3816</p>
+                </div>
+                <div class="bg-white p-3 sm:p-4 rounded-xl border border-gray-100 shadow-sm">
+                    <h4 class="text-[8px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" data-zh="顾问直连 WhatsApp" data-en="Consultant WhatsApp">顾问直连 WhatsApp</h4>
+                    <p class="text-[#22C55E] font-extrabold text-sm sm:text-lg">+6017-228 3816</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-100 shadow-sm space-y-3">
+                <div>
+                    <h4 class="text-[8px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" data-zh="业务电邮 Corporate Email" data-en="Corporate Email">业务电邮 Corporate Email</h4>
+                    <p class="text-[#1A1A2E] font-bold text-sm">info@gwtt.my &nbsp;/&nbsp; crystal@gwtt.my</p>
+                </div>
+                <hr class="border-gray-100" />
+                <div>
+                    <h4 class="text-[8px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1" data-zh="营业时间 Operating Hours" data-en="Operating Hours">营业时间 Operating Hours</h4>
+                    <p class="text-gray-600 text-xs sm:text-sm font-medium" data-zh="周一至周五: 09:00 AM – 06:00 PM <br><span class='text-rose-500'>（大马法定节假日及周末闭馆）</span>" data-en="Monday to Friday: 09:00 AM – 06:00 PM <br><span class='text-rose-500'>(Closed Weekends & Public Holidays)</span>">
+                        周一至周五: 09:00 AM – 06:00 PM <br /><span class="text-rose-500">（大马法定节假日及周末闭馆）</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHAPTER 5: FEATURED TOURS -->
+<section id="chapter5" class="relative w-full py-16 sm:py-24 bg-[#1A1A2E] text-white flex flex-col justify-center px-4 sm:px-6 border-t border-white/10">
+    <div class="max-w-7xl w-full mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 gap-4 sm:gap-6">
+            <div>
+                <span class="text-[8px] sm:text-xs font-bold text-[#2A7DE1] uppercase tracking-widest block mb-2" data-zh="核心 195 国路线图库" data-en="Core 195-Country Route Database">核心 195 国路线图库</span>
+                <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold" data-zh="精选高端实地验证路线" data-en="Curated & Verified Expeditions">
+                    精选高端实地验证路线
+                </h2>
+            </div>
+            <p class="text-gray-400 max-w-md text-xs sm:text-sm md:text-base font-light" data-zh="全部行程均由创始人基于实地深度考核排布。附带全额法定旅客公众责任险，确保您的跨国探索零死角。" data-en="All itineraries are rigorously mapped from the founder's personal fieldwork. Backed by mandatory public liability insurance for total international security.">
+                全部行程均由创始人基于实地深度考核排布。附带全额法定旅客公众责任险，确保您的跨国探索零死角。
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <!-- Tour 1 -->
+            <div class="tour-card bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-[#2A7DE1]/50 transition-all duration-300 opacity-0 translate-y-12 flex flex-col">
+                <div class="relative aspect-[4/3] overflow-hidden bg-gray-800">
+                    <img src="https://placehold.co/800x600/2A7DE1/FFFFFF?text=West+Africa" alt="West Africa" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    <span class="absolute top-3 left-3 bg-black/80 backdrop-blur text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-widest">极限远征</span>
+                </div>
+                <div class="p-4 sm:p-5 flex-1 flex flex-col">
+                    <div class="flex justify-between items-center text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2 sm:mb-3">
+                        <span data-zh="20天 17晚" data-en="20 Days 17 Nights">20天 17晚</span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-bold text-white leading-snug mb-3 sm:mb-4 flex-1" data-zh="西非世界非遗文脉与旷野史诗远征" data-en="West Africa UNESCO Heritage & Wilderness Epic Expedition">西非世界非遗文脉与旷野史诗远征</h3>
+                    <div class="pt-3 sm:pt-4 border-t border-white/10 flex justify-between items-end">
+                        <div>
+                            <span class="text-[8px] sm:text-[10px] text-gray-400 uppercase tracking-widest block" data-zh="起步价" data-en="Starting from">起步价</span>
+                            <span class="text-base sm:text-lg font-extrabold text-[#2A7DE1]">RM 47,188</span>
+                        </div>
+                        <a href="https://wa.me/60172283816" target="_blank" class="px-2 sm:px-3 py-1.5 bg-white/10 hover:bg-[#2A7DE1] text-white text-[10px] sm:text-xs font-bold rounded-md transition-colors" data-zh="专属定制" data-en="Customize">专属定制</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tour 2 -->
+            <div class="tour-card bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-[#2A7DE1]/50 transition-all duration-300 opacity-0 translate-y-12 flex flex-col" style="animation-delay: 0.1s;">
+                <div class="relative aspect-[4/3] overflow-hidden bg-gray-800">
+                    <img src="https://placehold.co/800x600/2A7DE1/FFFFFF?text=Caribbean" alt="Caribbean" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    <span class="absolute top-3 left-3 bg-rose-600/90 backdrop-blur text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-widest">2027先导</span>
+                </div>
+                <div class="p-4 sm:p-5 flex-1 flex flex-col">
+                    <div class="flex justify-between items-center text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2 sm:mb-3">
+                        <span data-zh="限定席位" data-en="Limited Slots">限定席位</span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-bold text-white leading-snug mb-3 sm:mb-4 flex-1" data-zh="2027 加勒比海传奇冒险家终极探索航线" data-en="2027 Caribbean Adventurer Ultimate Exploration Voyage">2027 加勒比海传奇冒险家终极探索航线</h3>
+                    <div class="pt-3 sm:pt-4 border-t border-white/10 flex justify-between items-end">
+                        <div>
+                            <span class="text-[8px] sm:text-[10px] text-gray-400 uppercase tracking-widest block" data-zh="预售价" data-en="Presale from">预售价</span>
+                            <span class="text-base sm:text-lg font-extrabold text-[#2A7DE1]">RM 21,888</span>
+                        </div>
+                        <a href="https://wa.me/60172283816" target="_blank" class="px-2 sm:px-3 py-1.5 bg-white/10 hover:bg-[#2A7DE1] text-white text-[10px] sm:text-xs font-bold rounded-md transition-colors" data-zh="专属定制" data-en="Customize">专属定制</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tour 3 -->
+            <div class="tour-card bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-[#2A7DE1]/50 transition-all duration-300 opacity-0 translate-y-12 flex flex-col" style="animation-delay: 0.2s;">
+                <div class="relative aspect-[4/3] overflow-hidden bg-gray-800">
+                    <img src="https://placehold.co/800x600/2A7DE1/FFFFFF?text=Japan" alt="Japan" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    <span class="absolute top-3 left-3 bg-emerald-600/90 backdrop-blur text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-widest">和风秘境</span>
+                </div>
+                <div class="p-4 sm:p-5 flex-1 flex flex-col">
+                    <div class="flex justify-between items-center text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2 sm:mb-3">
+                        <span data-zh="8天 6晚" data-en="8 Days 6 Nights">8天 6晚</span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-bold text-white leading-snug mb-3 sm:mb-4 flex-1" data-zh="日本福冈 + 鹿儿岛深度和风秘境与自然美学" data-en="Japan Fukuoka + Kagoshima Deep Cultural & Natural Aesthetics">日本福冈 + 鹿儿岛深度和风秘境与自然美学</h3>
+                    <div class="pt-3 sm:pt-4 border-t border-white/10 flex justify-between items-end">
+                        <div>
+                            <span class="text-[8px] sm:text-[10px] text-gray-400 uppercase tracking-widest block" data-zh="起步价" data-en="Starting from">起步价</span>
+                            <span class="text-base sm:text-lg font-extrabold text-[#2A7DE1]">RM 9,888</span>
+                        </div>
+                        <a href="https://wa.me/60172283816" target="_blank" class="px-2 sm:px-3 py-1.5 bg-white/10 hover:bg-[#2A7DE1] text-white text-[10px] sm:text-xs font-bold rounded-md transition-colors" data-zh="专属定制" data-en="Customize">专属定制</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tour 4 -->
+            <div class="tour-card bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-[#2A7DE1]/50 transition-all duration-300 opacity-0 translate-y-12 flex flex-col" style="animation-delay: 0.3s;">
+                <div class="relative aspect-[4/3] overflow-hidden bg-gray-800">
+                    <img src="https://placehold.co/800x600/2A7DE1/FFFFFF?text=Papua+New+Guinea" alt="Papua New Guinea" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    <span class="absolute top-3 left-3 bg-purple-600/90 backdrop-blur text-white text-[8px] sm:text-[10px] px-2 sm:px-3 py-1 rounded-full font-bold uppercase tracking-widest">小众猎奇</span>
+                </div>
+                <div class="p-4 sm:p-5 flex-1 flex flex-col">
+                    <div class="flex justify-between items-center text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2 sm:mb-3">
+                        <span data-zh="9天 7晚" data-en="9 Days 7 Nights">9天 7晚</span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-bold text-white leading-snug mb-3 sm:mb-4 flex-1" data-zh="巴布亚新几内亚原始部落文脉与绝美海岸" data-en="Papua New Guinea Tribal Heritage & Pristine Coastlines">巴布亚新几内亚原始部落文脉与绝美海岸</h3>
+                    <div class="pt-3 sm:pt-4 border-t border-white/10 flex justify-between items-end">
+                        <div>
+                            <span class="text-[8px] sm:text-[10px] text-gray-400 uppercase tracking-widest block" data-zh="起步价" data-en="Starting from">起步价</span>
+                            <span class="text-base sm:text-lg font-extrabold text-[#2A7DE1]">RM 27,888</span>
+                        </div>
+                        <a href="https://wa.me/60172283816" target="_blank" class="px-2 sm:px-3 py-1.5 bg-white/10 hover:bg-[#2A7DE1] text-white text-[10px] sm:text-xs font-bold rounded-md transition-colors" data-zh="专属定制" data-en="Customize">专属定制</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHAPTER 6: SOCIAL PROOF -->
+<section id="chapter6" class="relative w-full py-16 sm:py-24 bg-[#F8F9FA] flex flex-col justify-center px-4 sm:px-6">
+    <div class="max-w-6xl w-full mx-auto">
+        <div class="text-center mb-8 sm:mb-12 space-y-2 sm:space-y-3">
+            <span class="text-[8px] sm:text-xs font-bold text-[#2A7DE1] uppercase tracking-widest" data-zh="零虚假数据与口碑追踪" data-en="Empirical Tracking Data">零虚假数据与口碑追踪</span>
+            <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#1A1A2E]" data-zh="真实客群五星评价认证" data-en="Verified 5-Star Social Proof">真实客群五星评价认证</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <!-- Google Card -->
+            <div class="review-card p-6 sm:p-8 bg-white rounded-3xl border border-gray-200 shadow-md flex flex-col justify-between space-y-4 sm:space-y-6 opacity-0">
+                <div>
+                    <div class="flex flex-wrap items-center justify-between mb-3 sm:mb-4">
+                        <span class="text-[8px] sm:text-[10px] font-extrabold text-white bg-gray-900 px-2 sm:px-3 py-1 rounded-full tracking-widest uppercase">Google Local Search</span>
+                        <div class="text-amber-500 font-extrabold text-xs sm:text-sm tracking-widest">4.9 / 5.0 ⭐ (32 真实记录)</div>
+                    </div>
+                    <p class="text-[#1A1A2E] font-medium italic leading-relaxed text-xs sm:text-sm md:text-base" data-zh="“跟随 GWTT 走极地和复杂的出境行程绝对是最让人放心的体验。高端定制沟通极度高效，最赞的是行程没有任何隐形费用和二次消费套路。地接地陪细节咬合完美，无愧于马来西亚本土4.9分的极致口碑。”" data-en='"Following GWTT for polar and complex outbound itineraries is the most reassuring experience. Highly efficient communication, zero hidden fees, and seamless local coordination — truly deserving of Malaysia\'s 4.9-star reputation."'>
+                        “跟随 GWTT 走极地和复杂的出境行程绝对是最让人放心的体验。高端定制沟通极度高效，最赞的是行程没有任何隐形费用和二次消费套路。地接地陪细节咬合完美，无愧于马来西亚本土4.9分的极致口碑。”
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 sm:space-x-4 border-t border-gray-100 pt-3 sm:pt-4">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#2A7DE1] text-white font-bold flex items-center justify-center text-base sm:text-lg shadow-inner">D</div>
+                    <div>
+                        <h4 class="text-xs sm:text-sm font-extrabold text-[#1A1A2E]">Dato' Tan Sri Lim</h4>
+                        <div class="text-green-600 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest mt-0.5" data-zh="✓ Google Profile 审查真实" data-en="✓ Google Profile Verified">✓ Google Profile 审查真实</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Facebook Card -->
+            <div class="review-card p-6 sm:p-8 bg-white rounded-3xl border border-gray-200 shadow-md flex flex-col justify-between space-y-4 sm:space-y-6 opacity-0">
+                <div>
+                    <div class="flex flex-wrap items-center justify-between mb-3 sm:mb-4">
+                        <span class="text-[8px] sm:text-[10px] font-extrabold text-white bg-[#1877F2] px-2 sm:px-3 py-1 rounded-full tracking-widest uppercase">Facebook Business</span>
+                        <div class="text-amber-500 font-extrabold text-xs sm:text-sm tracking-widest">5.0 / 5.0 ⭐ (25 公开推荐)</div>
+                    </div>
+                    <p class="text-[#1A1A2E] font-medium italic leading-relaxed text-xs sm:text-sm md:text-base" data-zh="“零差评的记录果然名不虚传！中英双语的私人旅行顾问对接非常丝滑，完全消除复杂的机票多程联运和海外小众目的地酒店的入住盲区，一镜到底的高阶品质，让我们全家这次的私人出境旅行彻底省心。”" data-en='"The zero-negative-review reputation is well-deserved! Bilingual travel advisors provided seamless coordination, eliminating complexities of multi-leg flights and boutique hotel logistics. A truly worry-free private journey for our family."'>
+                        “零差评的记录果然名不虚传！中英双语的私人旅行顾问对接非常丝滑，完全消除复杂的机票多程联运和海外小众目的地酒店的入住盲区，一镜到底的高阶品质，让我们全家这次的私人出境旅行彻底省心。”
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 sm:space-x-4 border-t border-gray-100 pt-3 sm:pt-4">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-900 text-white font-bold flex items-center justify-center text-base sm:text-lg shadow-inner">S</div>
+                    <div>
+                        <h4 class="text-xs sm:text-sm font-extrabold text-[#1A1A2E]">Sarah Wong</h4>
+                        <div class="text-green-600 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest mt-0.5" data-zh="✓ Meta Business 审查真实" data-en="✓ Meta Business Verified">✓ Meta Business 审查真实</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHAPTER 7: SERVICE PROTOCOL -->
+<section id="chapter7" class="relative w-full py-16 sm:py-24 bg-white border-t border-gray-200 flex flex-col justify-center items-center px-4 sm:px-6">
+    <div class="max-w-5xl w-full space-y-10 sm:space-y-16">
+        <div class="text-center space-y-2 sm:space-y-3">
+            <span class="text-[8px] sm:text-xs font-bold text-[#2A7DE1] uppercase tracking-widest block" data-zh="标准行程规划管家系统" data-en="Standard Itinerary Concierge Flow">标准行程规划管家系统</span>
+            <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#1A1A2E]" data-zh="四阶段至臻服务承诺" data-en="Four-Stage Premium Protocol">四阶段至臻服务承诺</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div class="commitment-item p-4 sm:p-6 bg-[#F8F9FA] rounded-2xl text-center border border-gray-200 opacity-0">
+                <div class="text-2xl sm:text-3xl mb-2 sm:mb-4">🧭</div>
+                <h4 class="font-extrabold text-[#1A1A2E] text-xs sm:text-sm mb-1 sm:mb-2" data-zh="阶段 1: 需求对齐" data-en="Phase 1: Custom Intake">阶段 1: 需求对齐</h4>
+                <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium" data-zh="专属高端规划师一对一深度分析" data-en="1-on-1 profiling with premium planner">专属高端规划师一对一深度分析</p>
+            </div>
+            <div class="commitment-item p-4 sm:p-6 bg-[#F8F9FA] rounded-2xl text-center border border-gray-200 opacity-0">
+                <div class="text-2xl sm:text-3xl mb-2 sm:mb-4">🗺️</div>
+                <h4 class="font-extrabold text-[#1A1A2E] text-xs sm:text-sm mb-1 sm:mb-2" data-zh="阶段 2: 独家设计" data-en="Phase 2: Logistics Mapping">阶段 2: 独家设计</h4>
+                <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium" data-zh="基于195国合规数据库定制路线" data-en="Routing via 195-country database">基于195国合规数据库定制路线</p>
+            </div>
+            <div class="commitment-item p-4 sm:p-6 bg-[#F8F9FA] rounded-2xl text-center border border-gray-200 opacity-0">
+                <div class="text-2xl sm:text-3xl mb-2 sm:mb-4">💎</div>
+                <h4 class="font-extrabold text-[#1A1A2E] text-xs sm:text-sm mb-1 sm:mb-2" data-zh="阶段 3: 严格合规" data-en="Phase 3: MOTAC Audit">阶段 3: 严格合规</h4>
+                <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium" data-zh="执行MOTAC标准，落实全额保险" data-en="Strict MOTAC insurance compliance">执行MOTAC标准，落实全额保险</p>
+            </div>
+            <div class="commitment-item p-4 sm:p-6 bg-[#F8F9FA] rounded-2xl text-center border border-gray-200 opacity-0">
+                <div class="text-2xl sm:text-3xl mb-2 sm:mb-4">🛡️</div>
+                <h4 class="font-extrabold text-[#1A1A2E] text-xs sm:text-sm mb-1 sm:mb-2" data-zh="阶段 4: 全局保障" data-en="Phase 4: 24/7 Execution">阶段 4: 全局保障</h4>
+                <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium" data-zh="跨境出境全天候多语种应急保障" data-en="24/7 global execution support">跨境出境全天候多语种应急保障</p>
+            </div>
+        </div>
+
+        <div class="text-center pt-6 sm:pt-8 border-t border-gray-100">
+            <p class="text-xs sm:text-sm text-gray-500 font-bold mb-4 sm:mb-6 uppercase tracking-widest" data-zh="立即联系我们的总署顾问，定制您的下一个航线" data-en="Contact our lead consultants to draft your next voyage">立即联系我们的总署顾问，定制您的下一个航线</p>
+            <a href="https://wa.me/60172283816" target="_blank" class="whatsapp-pulse inline-flex items-center space-x-2 sm:space-x-3 px-6 sm:px-10 py-3 sm:py-5 bg-[#25D366] hover:bg-[#1DA851] text-white font-extrabold text-base sm:text-lg rounded-full shadow-xl transition-transform transform hover:-translate-y-1">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.488 1.449 5.412 1.451 5.428 0 9.845-4.394 9.848-9.793.001-2.615-1.011-5.074-2.852-6.918C17.207 2.05 14.744.993 12.13.993c-5.433 0-9.852 4.393-9.856 9.792-.001 1.984.518 3.921 1.508 5.66l-1.011 3.693 3.787-.992zm10.746-6.79c-.297-.148-1.758-.867-2.03-.967-.273-.099-.471-.148-.669.149-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.174.2-.298.3-.496.099-.198.05-.371-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.197 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/></svg>
+                <span data-zh="WhatsApp 官方直连" data-en="Connect on WhatsApp">WhatsApp 官方直连</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CHAPTER 8: FOOTER -->
+<footer id="chapter8" class="bg-[#1A1A2E] text-white px-4 sm:px-6 py-12 sm:py-16 footer-lg">
+    <div class="max-w-7xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
+        <div class="space-y-3 sm:space-y-4">
+            <img src="https://raw.githubusercontent.com/pacguy-mtk/test-travelagency/refs/heads/main/global-world-tour-travel-gwtt-logo-1.png" alt="GWTT Logo" class="h-8 sm:h-10 w-auto" />
+            <p class="text-xs text-gray-400 leading-relaxed font-bold">
+                Global World Tour & Travel Sdn. Bhd.<br />
+                <span class="font-normal text-gray-500" data-zh="官方企业注册号码: 1482466X / 202201036769" data-en="Corporate Reg No: 1482466X / 202201036769">官方企业注册号码: 1482466X / 202201036769</span>
+            </p>
+            <p class="text-[10px] text-gray-400 leading-relaxed font-medium" data-zh="受大马 MOTAC 核心规范监管，具备完全出入境旅游及航空票务合法运营资质。" data-en="Strictly governed by MOTAC Malaysia, legally authorized for comprehensive inbound, outbound, and ticketing operations.">
+                受大马 MOTAC 核心规范监管，具备完全出入境旅游及航空票务合法运营资质。
+            </p>
+        </div>
+
+        <div class="space-y-3">
+            <h5 class="text-xs font-extrabold uppercase tracking-widest text-[#2A7DE1]" data-zh="合规数据联络" data-en="Verified Contacts">合规数据联络</h5>
+            <ul class="text-[10px] sm:text-xs text-gray-400 space-y-2 font-medium">
+                <li><span data-zh="商业热线: " data-en="HQ Hotline: ">商业热线: </span><span class="text-white">+603-9055 3816</span></li>
+                <li><span data-zh="WhatsApp: " data-en="WhatsApp: ">WhatsApp: </span><span class="text-white">+6017-228 3816</span></li>
+                <li><span data-zh="公共事务: " data-en="Public Inquiries: ">公共事务: </span>info@gwtt.my</li>
+                <li><span data-zh="高阶定制: " data-en="Premium Dept: ">高阶定制: </span>crystal@gwtt.my</li>
+            </ul>
+        </div>
+
+        <div class="space-y-3">
+            <h5 class="text-xs font-extrabold uppercase tracking-widest text-[#2A7DE1]" data-zh="实体总部基地" data-en="HQ Location">实体总部基地</h5>
+            <p class="text-[10px] sm:text-xs text-gray-400 leading-relaxed font-medium">
+                5-2, Jalan Radin Bagus 1, <br />
+                Bandar Baru Sri Petaling, <br />
+                57000 Kuala Lumpur, Malaysia
+            </p>
+        </div>
+
+        <div class="space-y-3 border-t border-white/10 pt-6 lg:border-none lg:pt-0">
+            <h5 class="text-xs font-extrabold uppercase tracking-widest text-rose-500" data-zh="品牌清障与免责声明" data-en="Brand Disambiguation">品牌清障与免责声明</h5>
+            <p class="text-[10px] text-gray-400 leading-relaxed font-medium" data-zh="本站唯一主体为吉隆坡合规旅行社。本公司与澳洲 Gap Year 门户 (Global Work & Travel) 及印度同名区域租车品牌绝无任何资本及业务关联，敬请消费者认准官方网站。" data-en="Our sole operational entity is based in Kuala Lumpur. We possess zero business or capital affiliation with the Australian Gap Year portal 'Global Work & Travel' or the identically named Indian regional car rental fleet. Please verify our MOTAC credentials.">
+                本站唯一主体为吉隆坡合规旅行社。本公司与澳洲 Gap Year 门户 (Global Work & Travel) 及印度同名区域租车品牌绝无任何资本及业务关联，敬请消费者认准官方网站。
+            </p>
+            <div class="pt-2">
+                <a href="https://gwtt.my" class="text-xs font-bold text-[#2A7DE1] hover:text-white underline">Official Domain: gwtt.my</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto border-t border-white/10 mt-8 sm:mt-12 pt-6 text-center text-[10px] text-gray-500 font-medium tracking-wide">
+        © 2026 Global World Tour & Travel Sdn. Bhd. All Rights Reserved. Fully compliant with MOTAC & Tourism Industry Act 1992.
+    </div>
+</footer>
+
+<!-- FLOATERS -->
+<div class="fab-container">
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+    <a href="https://wa.me/60172283816" target="_blank" class="whatsapp-float whatsapp-pulse" aria-label="Contact us on WhatsApp">
+        <svg viewBox="0 0 24 24" class="w-7 h-7 sm:w-8 sm:h-8 fill-current"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.488 1.449 5.412 1.451 5.428 0 9.845-4.394 9.848-9.793.001-2.615-1.011-5.074-2.852-6.918C17.207 2.05 14.744.993 12.13.993c-5.433 0-9.852 4.393-9.856 9.792-.001 1.984.518 3.921 1.508 5.66l-1.011 3.693 3.787-.992zm10.746-6.79c-.297-.148-1.758-.867-2.03-.967-.273-.099-.471-.148-.669.149-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.174.2-.298.3-.496.099-.198.05-.371-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.197 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/></svg>
+    </a>
+</div>
+
+<!-- GSAP Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js">
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero parallax
+        const heroSection = document.getElementById('chapter1');
+        const heroBg = document.getElementById('hero-bg');
+        const heroPlane = document.getElementById('hero-plane');
+
+        heroSection.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 28;
+            const y = (e.clientY / window.innerHeight - 0.5) * 28;
+            heroBg.style.transform = `translate(${x * -0.3}px, ${y * -0.3}px) scale(1)`;
+            heroPlane.style.transform = `translate(${x * 5.5}px, ${y * 2.8}px) scale(1)`;
+        });
+        heroSection.addEventListener('mouseleave', () => {
+            heroBg.style.transform = 'translate(0px, 0px) scale(1)';
+            heroPlane.style.transform = 'translate(0px, 0px) scale(1)';
+        });
+
+        // Language toggle
+        const langToggle = document.getElementById('langToggle');
+        let currentLang = localStorage.getItem('gwtt_lang') || 'zh';
+        const updateLanguage = () => {
+            document.querySelectorAll('[data-zh]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+            langToggle.innerText = currentLang === 'zh' ? 'EN' : '中文';
+        };
+        langToggle.addEventListener('click', () => {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            localStorage.setItem('gwtt_lang', currentLang);
+            updateLanguage();
+        });
+        updateLanguage();
+
+        // GSAP animations
+        gsap.timeline()
+            .to('#hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power4.out', delay: 0.2 })
+            .to('#hero-subtext', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+            .to('#hero-ctas', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+            .to('#hero-stats', { opacity: 1, duration: 1 }, '-=0.4');
+
+        gsap.to('#founder-visual', {
+            opacity: 1,
+            x: 0,
+            duration: 1.2,
+            ease: 'power2.out',
+            scrollTrigger: { trigger: '#chapter3', start: 'top 65%', toggleActions: 'play none none reverse' }
+        });
+        gsap.to('#founder-text', {
+            opacity: 1,
+            x: 0,
+            duration: 1.2,
+            ease: 'power2.out',
+            scrollTrigger: { trigger: '#chapter3', start: 'top 60%', toggleActions: 'play none none reverse' }
+        });
+
+        gsap.to('#map-title', {
+            opacity: 1,
+            duration: 1,
+            scrollTrigger: { trigger: '#chapter4', start: 'top 70%' }
+        });
+        gsap.to('#map-container', {
+            opacity: 1,
+            scale: 1,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: '#chapter4', start: 'top 60%' }
+        });
+
+        gsap.to('.tour-card', {
+            opacity: 1,
+            y: 0,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: { trigger: '#chapter5', start: 'top 65%', toggleActions: 'play none none reverse' }
+        });
+
+        gsap.to('.review-card', {
+            opacity: 1,
+            y: 0,
+            stagger: 0.2,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: { trigger: '#chapter6', start: 'top 70%', toggleActions: 'play none none reverse' }
+        });
+
+        gsap.to('.commitment-item', {
+            opacity: 1,
+            scale: 1,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'back.out(1.5)',
+            scrollTrigger: { trigger: '#chapter7', start: 'top 85%', toggleActions: 'play none none reverse' }
+        });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Auto slide for founder images
+        const slides = document.querySelectorAll('.slide-img');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        function nextSlide() {
+            slides.forEach((img, index) => {
+                img.classList.toggle('active', index === currentSlide);
+            });
+            currentSlide = (currentSlide + 1) % totalSlides;
+        }
+
+        slides[0].classList.add('active');
+        setInterval(nextSlide, 3000);
+    });
+</script>
+</body>
+</html>
